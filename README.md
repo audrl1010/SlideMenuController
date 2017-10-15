@@ -43,16 +43,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 ### Properties
 ```swift
-var animationDuration: TimeInterval
+var animationDuration: TimeInterval // default: 0.45
 
-var leftVisibleWidthPercentage: CGFloat
-var rightVisibleWidthPercentage: CGFloat
+var leftVisibleWidthPercentage: CGFloat // 0.0 ~ 1.0  default: 0.45
+var rightVisibleWidthPercentage: CGFloat // 0.0 ~ 1.0 default: 0.45
 
-var allowedRightSwipe: Bool
-var allowedLeftSwipe: Bool
+var allowedRightSwipe: Bool // default: true
+var allowedLeftSwipe: Bool // default: true
 
-var minimumMovePercentage: CGFloat
-var panningLimitedToTopViewController: Bool
+var minimumMovePercentage: CGFloat // 0.0 ~ 1.0  default: 0.15
+var panningLimitedToTopViewController: Bool // default: true
 
 var mainNavigationBarLeftToggleButtonIcon: UIImage?
 var mainNavigationBarRightToggleButtonIcon: UIImage?
