@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/cocoapods/l/SlideMenuController.svg?style=flat)](http://cocoapods.org/pods/SlideMenuController)
 [![Platform](https://img.shields.io/cocoapods/p/SlideMenuController.svg?style=flat)](http://cocoapods.org/pods/SlideMenuController)
 
-![alt text](https://github.com/audrl1010/SlideMenuController/blob/master/Example/SlideMenuController/SlideMenuControllerGif.gif)
+![alt text](https://github.com/audrl1010/SlideMenuController/blob/master/Example/SlideMenuController/gif.gif)
 
 ## Requirements
 iOS 9+
