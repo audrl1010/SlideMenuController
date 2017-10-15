@@ -20,6 +20,7 @@ pod 'SlideMenuController'
 ```
 
 ## Usage
+### Setup
 
 ```swift
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -38,7 +39,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     return true
   }
 }
+```
 
+### QuickStart
+```swift
+....
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    ...
+    let navi = UINavigationController(rootViewController: selectedMenuViewController)
+    self.slideMenuController?.setMain(viewController: navi)
+  }
+....
 ```
 
 ### Properties

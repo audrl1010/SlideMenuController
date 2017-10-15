@@ -26,7 +26,6 @@ iOS Slide Menu Controller. It is written in pure swift.
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'audrl1010' => 'audrl1010@naver.com' }
   s.source           = { :git => 'https://github.com/audrl1010/SlideMenuController.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '9.0'
 
