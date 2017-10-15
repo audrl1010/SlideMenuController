@@ -5,10 +5,6 @@
 [![License](https://img.shields.io/cocoapods/l/SlideMenuController.svg?style=flat)](http://cocoapods.org/pods/SlideMenuController)
 [![Platform](https://img.shields.io/cocoapods/p/SlideMenuController.svg?style=flat)](http://cocoapods.org/pods/SlideMenuController)
 
-## Example
-
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
 ## Requirements
 
 ## Installation
@@ -18,6 +14,56 @@ it, simply add the following line to your Podfile:
 
 ```ruby
 pod 'SlideMenuController'
+```
+
+## Usage
+
+```swift
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+  var window: UIWindow?
+
+  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    ...
+    let slideMenuController = SlideMenuController(
+      mainViewController: mainViewController,
+      leftViewController: leftViewController,
+      rightViewController: rightViewController
+    )
+
+    window?.rootViewController = slideMenuController
+    return true
+  }
+}
+
+```
+
+### Properties
+```swift
+var animationDuration: TimeInterval
+var leftVisibleWidthPercentage: CGFloat
+var rightVisibleWidthPercentage: CGFloat
+var allowedRightSwipe: Bool
+var allowedLeftSwipe: Bool
+var minimumMovePercentage: CGFloat
+var panningLimitedToTopViewController: Bool
+
+var mainNavigationBarLeftToggleButtonIcon: UIImage?
+var mainNavigationBarRightToggleButtonIcon: UIImage?
+```
+
+### Methods
+```swift
+func setRight(viewController newRightViewController: UIViewController?)
+func setLeft(viewController newLeftViewController: UIViewController?)
+func setMain(viewController newMainViewController: UIViewController?)
+
+func showMain()
+func showRight()
+func showLeft()
+
+func toggleLeft()
+func toggleRight()
 ```
 
 ## Author
