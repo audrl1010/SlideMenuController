@@ -44,10 +44,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 ### Properties
 ```swift
 var animationDuration: TimeInterval
+
 var leftVisibleWidthPercentage: CGFloat
 var rightVisibleWidthPercentage: CGFloat
+
 var allowedRightSwipe: Bool
 var allowedLeftSwipe: Bool
+
 var minimumMovePercentage: CGFloat
 var panningLimitedToTopViewController: Bool
 
