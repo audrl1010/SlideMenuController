@@ -5,7 +5,10 @@
 [![License](https://img.shields.io/cocoapods/l/SlideMenuController.svg?style=flat)](http://cocoapods.org/pods/SlideMenuController)
 [![Platform](https://img.shields.io/cocoapods/p/SlideMenuController.svg?style=flat)](http://cocoapods.org/pods/SlideMenuController)
 
+![alt text](https://github.com/audrl1010/SlideMenuController/blob/master/Example/SlideMenuController/SlideMenuControllerGif.gif)
+
 ## Requirements
+iOS 9+
 
 ## Installation
 
@@ -68,7 +71,7 @@ func toggleRight()
 
 ## Author
 
-audrl1010, audrl1010@naver.com
+🇰🇷Myung gi son, audrl1010@naver.com
 
 ## License
 
