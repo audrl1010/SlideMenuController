@@ -237,8 +237,8 @@ public class SlideMenuController: UIViewController {
               guard let `self` = self else { return }
               UIApplication.shared.beginIgnoringInteractionEvents()
               let movement = (self.currentSlideOutState == .left)
-                ? self.view.bounds.size.width + 10
-                : -self.view.bounds.size.width - 10
+                ? self.view.bounds.size.width
+                : -self.view.bounds.size.width
               
               self.mainContainerViewLeftConstraint?.constant = movement
             }
@@ -644,7 +644,7 @@ extension SlideMenuController {
   
   /// if run the animation immediately while placing the view, looks bad.
   private func preventRunningAnimationImmediatelyWhileLayoutView(_ block: @escaping () -> Void) {
-    let deadlineTime = DispatchTime.now() + 0.07
+    let deadlineTime = DispatchTime.now() + 0.06
     DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
       block()
     }
