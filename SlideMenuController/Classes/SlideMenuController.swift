@@ -603,9 +603,21 @@ extension SlideMenuController {
   ) {
     let button = UIButton(type: .custom)
     button.setImage(icon, for: .normal)
-    button.flu
-      .widthAnchor(equalToConstant: icon.size.width * UIScreen.main.scale)
-      .heightAnchor(equalToConstant: icon.size.height * UIScreen.main.scale)
+    
+    if #available(iOS 11, *) {
+      button.flu
+        .widthAnchor(equalToConstant: icon.size.width)
+        .heightAnchor(equalToConstant: icon.size.height)
+    }
+    else {
+      button.frame = CGRect(
+        x: 0,
+        y: 0,
+        width: icon.size.width,
+        height: icon.size.height
+      )
+    }
+
     switch direction {
     case .left:
       button.addTarget(self, action: #selector(toggleLeft), for: .touchUpInside)
@@ -635,7 +647,6 @@ extension SlideMenuController {
   
   private func removeChildViewController(_ viewController: UIViewController?) {
     if let viewController = viewController {
-      viewController.view.layer.removeAllAnimations()
       viewController.willMove(toParentViewController: nil)
       viewController.view.removeFromSuperview()
       viewController.removeFromParentViewController()
