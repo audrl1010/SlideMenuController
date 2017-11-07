@@ -215,10 +215,12 @@
 				TargetAttributes = {
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = CU3LKXLMCE;
 						LastSwiftMigration = 0900;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = CU3LKXLMCE;
 						LastSwiftMigration = 0900;
 						TestTargetID = 607FACCF1AFB9204008FA782;
 					};
@@ -500,6 +502,7 @@
 			baseConfigurationReference = 9A2E6C714F238ADDF772C389 /* Pods-SlideMenuController_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = CU3LKXLMCE;
 				INFOPLIST_FILE = SlideMenuController/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -516,6 +519,7 @@
 			baseConfigurationReference = 43379327DFADBB34D7B19536 /* Pods-SlideMenuController_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = CU3LKXLMCE;
 				INFOPLIST_FILE = SlideMenuController/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -531,6 +535,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8D618E2578B47D4E9D09D295 /* Pods-SlideMenuController_Tests.debug.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = CU3LKXLMCE;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -552,6 +557,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A0FB34BD22288F2E4B23F9AC /* Pods-SlideMenuController_Tests.release.xcconfig */;
 			buildSettings = {
+				DEVELOPMENT_TEAM = CU3LKXLMCE;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",

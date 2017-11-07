@@ -9,11 +9,60 @@
 import UIKit
 import SlideMenuController
 
-class MainViewController: HasLabelViewController {
+class MainViewController: UIViewController {
+  var tableView = UITableView().then {
+    $0.separatorStyle = .none
+    $0.separatorColor = .clear
+    $0.register(MenuCell.self, forCellReuseIdentifier: MenuCell.cellIdentifier)
+  }
+  
+  var menus: [String] = ((1...30).map { "\($0)" })
+  
   override func viewDidLoad() {
     super.viewDidLoad()
+    tableView.delegate = self
+    tableView.dataSource = self
     view.backgroundColor = .white
-    label.text = "Main"
+    view.addSubview(tableView)
+    
+    tableView.flu
+      .topAnchor(equalTo: topLayoutGuide.bottomAnchor)
+      .leftAnchor(equalTo: view.leftAnchor)
+      .rightAnchor(equalTo: view.rightAnchor)
+      .bottomAnchor(equalTo: bottomLayoutGuide.topAnchor)
+  }
+}
+
+extension MainViewController: UITableViewDataSource {
+  func tableView(
+    _ tableView: UITableView,
+    numberOfRowsInSection section: Int
+  ) -> Int {
+    return menus.count
+  }
+  
+  func tableView(
+    _ tableView: UITableView,
+    cellForRowAt indexPath: IndexPath
+  ) -> UITableViewCell {
+    let menuCell = tableView.dequeueReusableCell(withIdentifier: MenuCell.cellIdentifier) as! MenuCell
+    menuCell.label.text = menus[indexPath.row]
+    menuCell.label.textAlignment = .center
+    return menuCell
+  }
+}
+
+extension MainViewController: UITableViewDelegate {
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    tableView.deselectRow(at: indexPath, animated: true)
+    print(indexPath.row + 1)
+  }
+  
+  func tableView(
+    _ tableView: UITableView,
+    heightForRowAt indexPath: IndexPath
+  ) -> CGFloat {
+    return 50
   }
 }
 
