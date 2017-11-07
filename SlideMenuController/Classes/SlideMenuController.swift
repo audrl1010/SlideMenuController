@@ -26,7 +26,7 @@ public enum SlideOutState: String {
   case right
 }
 
-public class SlideMenuController: UIViewController {
+public class SlideMenuController: BaseViewController {
   
   // MARK: - Public Properties
   
@@ -82,8 +82,7 @@ public class SlideMenuController: UIViewController {
     $0.backgroundColor = .clear
   }
   
-  private var mainVCViewTapGesture: UITapGestureRecognizer?
-  private var mainVCViewPanGesture: UIPanGestureRecognizer?
+  private var mainContainerTapGesture: UITapGestureRecognizer?
   
   private var mainContainerViewLeftConstraint: NSLayoutConstraint?
   private var mainContainerViewLeftConstraintValue: CGFloat {
@@ -98,55 +97,37 @@ public class SlideMenuController: UIViewController {
     rightViewController: UIViewController? = nil
   ) {
     self.init()
-    setLeft(viewController: leftViewController)
-    setMain(viewController: mainViewController)
-    setRight(viewController: rightViewController)
+    self.mainViewController = mainViewController
+    self.leftViewController = leftViewController
+    self.rightViewController = rightViewController
+    addChildViewController(
+      targetView: mainContainerView,
+      targetViewController: mainViewController
+    )
+    addChildViewController(
+      targetView: leftContainerView,
+      targetViewController: leftViewController
+    )
+    addChildViewController(
+      targetView: rightContainerView,
+      targetViewController: rightViewController
+    )
   }
   
-  override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-    super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-    setupViews()
-  }
-  
-  public required init?(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)
-    setupViews()
-  }
-  
-  private func setupViews() {
-    func addSubviews(_ subviews: UIView...) {
-      for subview in subviews {
-        view.addSubview(subview)
-      }
-    }
-    func addPanGesture(toView view: UIView) {
-      let panGesture = UIPanGestureRecognizer()
-      panGesture.addTarget(self, action: #selector(handlePan(_:)))
-      panGesture.delegate = self
-      view.addGestureRecognizer(panGesture)
-    }
+  public override func setupViews() -> [CanBeSubview]? {
+    addPanGesture(toView: mainContainerView)
     
-    func addTapGesture(toView view: UIView) {
-      let tapGesture = UITapGestureRecognizer()
-      tapGesture.addTarget(self, action: #selector(handleTap(_:)))
-      tapGesture.delegate = self
-      view.addGestureRecognizer(tapGesture)
-    }
-    addSubviews(
+    return [
       rightContainerView,
       leftContainerView,
       mainContainerView
-    )
-    
-    addPanGesture(toView: mainContainerView)
-    addTapGesture(toView: mainContainerView)
-    
+    ]
+  }
+  
+  public override func setupConstraints() {
     mainContainerView.flu
       .topAnchor(equalTo: view.topAnchor)
-      .leftAnchor(
-        equalTo: view.leftAnchor,
-        constraint: &mainContainerViewLeftConstraint
-      )
+      .leftAnchor(equalTo: view.leftAnchor, constraint: &mainContainerViewLeftConstraint)
       .widthAnchor(equalTo: view.widthAnchor)
       .heightAnchor(equalTo: view.heightAnchor)
     
@@ -185,6 +166,7 @@ public class SlideMenuController: UIViewController {
     if let newRightViewController = newRightViewController {
       if rightViewController != newRightViewController {
         let previousRightVC = rightViewController
+        
         if isViewLoaded {
           removeChildViewController(previousRightVC)
           rightViewController = newRightViewController
@@ -198,7 +180,6 @@ public class SlideMenuController: UIViewController {
   }
   
   public func setMain(viewController newMainViewController: UIViewController?) {
-    
     // if mainViewController is UINavigationController, add barButtonItem(left, right).
     func addBarButtonItemInMainViewController() {
       if let topViewController = topViewControllerInMainViewController() {
@@ -222,6 +203,7 @@ public class SlideMenuController: UIViewController {
     if let newMainViewController = newMainViewController {
       if mainViewController != newMainViewController {
         let previousMainVC = mainViewController
+        
         if currentSlideOutState == .main {
           removeChildViewController(previousMainVC)
           mainViewController = newMainViewController
@@ -254,7 +236,9 @@ public class SlideMenuController: UIViewController {
                 targetView: self.mainContainerView,
                 targetViewController: newMainViewController
               )
+              
               addBarButtonItemInMainViewController()
+              
               self.preventRunningAnimationImmediatelyWhileLayoutView() { [weak self] in
                 guard let `self` = self else { return }
                 self.animateMainViewController()
@@ -274,6 +258,9 @@ public class SlideMenuController: UIViewController {
         targetView: leftContainerView,
         targetViewController: leftViewController
       )
+      // add tapGesture
+      mainContainerTapGesture = addTapGesture(toView: mainContainerView)
+      
       animateLeftViewController()
     }
   }
@@ -281,10 +268,14 @@ public class SlideMenuController: UIViewController {
   public func showRight() {
     let notAlreadyShowed = (currentSlideOutState != .right)
     if notAlreadyShowed {
+      
       addChildViewController(
         targetView: rightContainerView,
         targetViewController: rightViewController
       )
+      // add tapGesture
+      mainContainerTapGesture = addTapGesture(toView: mainContainerView)
+      
       animateRightViewController()
     }
   }
@@ -292,6 +283,10 @@ public class SlideMenuController: UIViewController {
   public func showMain() {
     let notAlreadyShowed = (currentSlideOutState != .main)
     if notAlreadyShowed {
+      // remove tapGesture
+      removeTapGesture(mainContainerTapGesture, ofView: mainContainerView)
+      self.mainContainerTapGesture = nil
+      
       animateMainViewController()
     }
   }
@@ -303,12 +298,19 @@ public class SlideMenuController: UIViewController {
         targetView: leftContainerView,
         targetViewController: leftViewController
       )
+      // add tapGesture
+      mainContainerTapGesture = addTapGesture(toView: mainContainerView)
+      
       preventRunningAnimationImmediatelyWhileLayoutView { [weak self] in
         guard let `self` = self else { return }
         self.animateLeftViewController()
       }
     }
     else {
+      // remove tapGesture
+      removeTapGesture(mainContainerTapGesture, ofView: mainContainerView)
+      mainContainerTapGesture = nil
+      
       animateMainViewController()
     }
   }
@@ -320,12 +322,19 @@ public class SlideMenuController: UIViewController {
         targetView: rightContainerView,
         targetViewController: rightViewController
       )
+      // add tapGesture
+      mainContainerTapGesture = addTapGesture(toView: mainContainerView)
+      
       preventRunningAnimationImmediatelyWhileLayoutView { [weak self] in
         guard let `self` = self else { return }
         self.animateRightViewController()
       }
     }
     else {
+      // remove tapGesture
+      removeTapGesture(mainContainerTapGesture, ofView: mainContainerView)
+      mainContainerTapGesture = nil
+      
       animateMainViewController()
     }
   }
@@ -442,6 +451,10 @@ public class SlideMenuController: UIViewController {
   // MARK: - Action
   
   @objc func handleTap(_ tapGesture: UITapGestureRecognizer) {
+    // remove tapGesture
+    removeTapGesture(mainContainerTapGesture, ofView: mainContainerView)
+    mainContainerTapGesture = nil
+    
     animateMainViewController()
   }
   
@@ -477,7 +490,7 @@ public class SlideMenuController: UIViewController {
       }
       
       if mainContainerViewLeftConstraintValue > 0 {
-        // showed leftViewController
+        // show leftViewController
         if leftViewController?.view.superview == nil {
           addChildViewController(
             targetView: leftContainerView,
@@ -489,7 +502,7 @@ public class SlideMenuController: UIViewController {
         }
       }
       else if mainContainerViewLeftConstraintValue < 0 {
-        // showed rightViewController
+        // show rightViewController
         if rightViewController?.view.superview == nil {
           addChildViewController(
             targetView: rightContainerView,
@@ -510,31 +523,69 @@ public class SlideMenuController: UIViewController {
         if isDraggingLeft {
           if rightViewController?.view.superview != nil {
             animateMainViewController()
-          } else {
+          }
+          else {
             // is possible Left Move ?
-            (movement > minimum) ? animateLeftViewController() : animateMainViewController()
+            if (movement > minimum) {
+              // add tapGesture
+              mainContainerTapGesture = addTapGesture(toView: mainContainerView)
+              
+              animateLeftViewController()
+            }
+            else {
+              animateMainViewController()
+            }
           }
         }
         else {
           if leftViewController?.view.superview != nil {
             animateMainViewController()
-          } else {
+          }
+          else {
             // is possible Right Move ?
-            (movement < -minimum) ? animateRightViewController() : animateMainViewController()
+            if (movement < -minimum) {
+              // add tapGesture
+              mainContainerTapGesture = addTapGesture(toView: mainContainerView)
+              
+              animateRightViewController()
+            }
+            else {
+              animateMainViewController()
+            }
           }
         }
       case .left:
         if isDraggingLeft {
           animateLeftViewController()
-        } else {
+        }
+        else {
           // is possible Main Move ?
-          (movement < -minimum) ? animateMainViewController() : animateLeftViewController()
+          if (movement < -minimum) {
+            // remove tapGesture
+            removeTapGesture(mainContainerTapGesture, ofView: mainContainerView)
+            mainContainerTapGesture = nil
+            
+            animateMainViewController()
+          }
+          else {
+            animateLeftViewController()
+          }
         }
       case .right:
         if isDraggingLeft {
           // is possible Main Move ?
-          (movement > minimum) ? animateMainViewController() : animateRightViewController()
-        } else {
+          if (movement > minimum) {
+            // remove tapGesture
+            removeTapGesture(mainContainerTapGesture, ofView: mainContainerView)
+            mainContainerTapGesture = nil
+            
+            animateMainViewController()
+          }
+          else {
+            animateRightViewController()
+          }
+        }
+        else {
           animateRightViewController()
         }
       }
@@ -544,7 +595,26 @@ public class SlideMenuController: UIViewController {
 }
 
 // MARK: - UIGestureRecognizerDelegate
+
 extension SlideMenuController: UIGestureRecognizerDelegate {
+  
+  public func gestureRecognizer(
+    _ gestureRecognizer: UIGestureRecognizer,
+    shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+  ) -> Bool {
+    if let pan = gestureRecognizer as? UIPanGestureRecognizer {
+      let translate = pan.translation(in: pan.view!)
+      // determine if right swipe is allowed
+      if (translate.x < 0 && !allowedRightSwipe) {
+        return true
+      }
+      // determine if left swipe is allowed
+      if (translate.x > 0 && !allowedLeftSwipe) {
+        return true
+      }
+    }
+    return false
+  }
   
   public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
     
@@ -582,6 +652,28 @@ extension SlideMenuController: UIGestureRecognizerDelegate {
 // MARK: - Internal Helper
 extension SlideMenuController {
   
+  private func addPanGesture(toView view: UIView) {
+    let panGesture = UIPanGestureRecognizer()
+    panGesture.addTarget(self, action: #selector(handlePan(_:)))
+    panGesture.delegate = self
+    panGesture.cancelsTouchesInView = false
+    view.addGestureRecognizer(panGesture)
+  }
+  
+  private func addTapGesture(toView view: UIView) -> UITapGestureRecognizer {
+    let tapGesture = UITapGestureRecognizer()
+    tapGesture.addTarget(self, action: #selector(handleTap(_:)))
+    tapGesture.delegate = self
+    view.addGestureRecognizer(tapGesture)
+    return tapGesture
+  }
+  
+  private func removeTapGesture(_ tapGesture: UITapGestureRecognizer?, ofView view: UIView) {
+    if let tapGesture = tapGesture {
+      view.removeGestureRecognizer(tapGesture)
+    }
+  }
+  
   private func topViewControllerInMainViewController() -> UIViewController? {
     if let nav = mainViewController as? UINavigationController {
       if nav.viewControllers.count > 0 {
@@ -617,13 +709,21 @@ extension SlideMenuController {
         height: icon.size.height
       )
     }
-
+    
     switch direction {
     case .left:
-      button.addTarget(self, action: #selector(toggleLeft), for: .touchUpInside)
+      button.addTarget(
+        self,
+        action: #selector(toggleLeft),
+        for: .touchUpInside
+      )
       viewController.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: button)
     case .right:
-      button.addTarget(self, action: #selector(toggleRight), for: .touchUpInside)
+      button.addTarget(
+        self,
+        action: #selector(toggleRight),
+        for: .touchUpInside
+      )
       viewController.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: button)
     }
   }
