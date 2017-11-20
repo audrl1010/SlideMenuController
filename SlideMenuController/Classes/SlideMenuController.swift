@@ -363,7 +363,7 @@ public class SlideMenuController: BaseViewController {
     rightContainerView.isUserInteractionEnabled = false
     mainViewController?.view.isUserInteractionEnabled = true
 
-    if (mainContainerTapGesture != nil) {
+    if mainContainerTapGesture != nil {
         removeTapGesture(mainContainerTapGesture, ofView: mainContainerView)
         mainContainerTapGesture = nil
     }
